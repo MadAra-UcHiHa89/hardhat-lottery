@@ -13,4 +13,12 @@ module.exports = {
   solidity: {
     compilers: [{ version: "0.8.8" }, { version: "0.6.6" }],
   },
+  namedAccounts: {
+    deployer: {
+      default: 0,
+    },
+    player: {
+      default: 1,
+    },
+  },
 };
