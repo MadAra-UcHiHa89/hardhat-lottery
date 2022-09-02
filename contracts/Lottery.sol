@@ -198,4 +198,8 @@ contract Lottery is VRFConsumerBaseV2, KeeperCompatibleInterface {
     function getRequestConfirmations() public pure returns (uint256) {
         return REQUEST_CONFIRMATIONS; // the number of confirmations vrf coordinator needs to get the random number
     }
+
+    function getInterval() public view returns (uint256) {
+        return i_interval; // the time interval between the time the lottery result is calculated
+    }
 }
