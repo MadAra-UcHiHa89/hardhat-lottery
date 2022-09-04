@@ -1,6 +1,7 @@
 const { network, ethers } = require("hardhat");
 const { developmentChains, networkConfig } = require("../helper-hardhat-config");
-const { verify } = require("../utils/verify");
+const { verify } = require("../utils/verify.js");
+require("dotenv").config();
 
 module.exports = async ({ getNamedAccounts, deployments }) => {
   const { deploy } = deployments;
@@ -24,7 +25,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     // funds the subscription with some LINK , which can be used by our contract consumer , to make requests to vrf coordinator
   } else {
     // => Mainnet / testnet
-    VRFCoordinatorV2Address = networkConfig[network.config.chainId].VRFCoordinatorV2Mock;
+    VRFCoordinatorV2Address = networkConfig[network.config.chainId].vrfCoordinatorV2;
     subscriptionId = networkConfig[network.config.chainId].subscriptionId;
   }
   // console.log(networkConfig);
@@ -52,9 +53,18 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
 
   if (!developmentChains.includes(network.name) && process.env.ETHERSCAN_API_KEY) {
     // => not on a dev chain ,  && there's an etherscan api key which is required to verify the contract then only verify the contract
+    console.log("Verifying Lottery contract on etherscan...");
     verify(Lottery.address, args);
   }
   console.log("----------------------------------------------------");
 };
 
 module.exports.tags = ["all", "lottery"];
+
+// For deployement on testnet we need:
+// 0. Create subscription for both VRF and Keepers (can do all these steps either programatically or through a UI)
+// 1. get the subscription id from the vrf coordinator
+// 2. deploy contract with the subscription id
+// 3. Resgister the contract with chainLink VRF ( SO THAT it can make requests to vrf coordinator) & its sub id (so the subscription can finance the requests)
+// 4. Register the contract with chainlink keepers once deployed ( so that theyll call the checkUpkeep function of our contract)
+// 5. Run Staging Tests

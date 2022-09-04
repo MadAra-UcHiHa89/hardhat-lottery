@@ -81,6 +81,7 @@ contract Lottery is VRFConsumerBaseV2, KeeperCompatibleInterface {
             revert LotteryNotOpen();
         }
         s_participants.push(payable(msg.sender)); // Adding the sender to the array of participants , doing explicit typecasting to make address to  address payable
+
         emit RaffleEnter(msg.sender); // Emitting the event
     }
 
@@ -93,6 +94,8 @@ contract Lottery is VRFConsumerBaseV2, KeeperCompatibleInterface {
         // Now the random number we get is going to be huge so , we'll use ranom number % number of participants to get an index of winner
         uint256 winnerIndex = randomWords[0] % s_participants.length;
         address payable RecentWinner = s_participants[winnerIndex]; // winner is the address of the winner
+        s_recentWinner = RecentWinner;
+
         s_raffleState = RaffleState.OPEN; // Raffle is open again , since we have selcetd a winner
         // Reset the players array , so that we can start the lottery again
         s_participants = new address payable[](0);

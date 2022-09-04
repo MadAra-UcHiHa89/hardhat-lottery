@@ -7,7 +7,7 @@ const networkConfig = {
     // When deploying to testnets we'll use real deployed coordinatosr address , while in testing we'll use mock's address
     entranceFee: ethers.utils.parseEther("0.01"),
     gasLane: "0x79d3d8832d904592c0bf9818b621522c988bb8b0c05cdc3b15aea1b6e8db0c15",
-    subscriptionId: 770,
+    subscriptionId: 987, // actual subId
     callbackGasLimit: "500000", // 500000 ,500k gas limit
     interval: "30", // 30 seconds
   },
